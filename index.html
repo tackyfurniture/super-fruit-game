@@ -650,7 +650,7 @@
     }
 
     // Event listeners for ball interactions
-    ball.addEventListener('mousedown', (e) => {
+    ball.addEventListener('pointerdown', (e) => {
         if (!gameStart) { // If the game has not started, when the mouse goes down on the ball, that means the game is starting :)
 
             // Remove the intro instructional text (lower the opacity because why would i ever removechild?)
@@ -717,7 +717,7 @@
         }
     });
 
-    document.addEventListener('mousemove', (e) => {
+    document.addEventListener('pointermove', (e) => {
         if (gameStart) {
             if (isDragging) {
                 const mouseX = e.clientX;
@@ -747,7 +747,7 @@
         }
     });
 
-    document.addEventListener('mouseup', (e) => {
+    document.addEventListener('pointerup', (e) => {
         if (gameStart) {
             if (isDragging) {
                 isDragging = false;
