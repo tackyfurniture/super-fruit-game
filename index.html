@@ -9,16 +9,16 @@
 
 <body>
     <!-- Timer Bar, counts the game time. Visible when gameStart = true, Invisble and reset when gameStart = false. -->
-    <div id="timer-bar" class="game-start-dependant"></div>
+    <div id="timer-bar" class="game-start-dependant no-drag"></div>
 
     <!-- Interaction Area, elements player can interact with. Ball and throw area.-->
-    <div id="throw-area" class="game-start-dependant"></div>
+    <div id="throw-area" class="game-start-dependant no-drag"></div>
     <a onmousedown="event.preventDefault()">
         <div id="ball"></div>
     </a>
 
     <!-- All Fruit, holds both regular fruit and created super fruit. -->
-    <div id="fruit-container">
+    <div id="fruit-container no-drag">
     </div>
 
     <!-- Wow for fruit collection, gives feedback to player that they have collected a fruit -->
@@ -39,16 +39,16 @@
     </div>
 
     <!-- Super Fruit Time! Progress Bar -->
-    <div class="progress-bar-container game-start-dependant">
-        <svg id="progress-bar-container-inner" viewBox="0 0 0 0">
+    <div class="progress-bar-container game-start-dependant no-drag">
+        <svg id="progress-bar-container-inner no-drag" viewBox="0 0 0 0">
             <g>
-                <circle cx="0" cy="0" r="125" class="progress-bar" id="background-bar"></circle>
+                <circle cx="0" cy="0" r="125" class="progress-bar no-drag" id="background-bar"></circle>
             </g>
             <g>
-                <circle cx="0" cy="0" r="125" class="progress-bar" id="collected-fruit-progress"></circle>
+                <circle cx="0" cy="0" r="125" class="progress-bar no-drag" id="collected-fruit-progress"></circle>
             </g>
             <g>
-                <circle cx="0" cy="0" r="125" class="progress-bar" id="super-fruit-timer"></circle>
+                <circle cx="0" cy="0" r="125" class="progress-bar no-drag" id="super-fruit-timer"></circle>
             </g>
         </svg>
     </div>
