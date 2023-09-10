@@ -4,34 +4,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ball Bounce Fruit Collection Game</title>
+    <title>Super Fruit Game</title>
 </head>
 
 <body>
-    <!-- Timer Bar -->
+    <!-- Timer Bar, counts the game time. Visible when gameStart = true, Invisble and reset when gameStart = false. -->
     <div id="timer-bar" class="game-start-dependant"></div>
 
-    <!-- Interaction Area-->
+    <!-- Interaction Area, elements player can interact with. Ball and throw area.-->
     <div id="throw-area" class="game-start-dependant"></div>
     <a onmousedown="event.preventDefault()">
         <div id="ball"></div>
     </a>
 
-    <!-- All Fruit -->
+    <!-- All Fruit, holds both regular fruit and created super fruit. -->
     <div id="fruit-container">
     </div>
 
-    <!-- Wow for fruit collection -->
+    <!-- Wow for fruit collection, gives feedback to player that they have collected a fruit -->
     <div id="wow-text" class="no-drag game-start-dependant"></div>
 
-    <!-- Begginning text  -->
+    <!-- Begginning text, intro text with instructions -->
     <text id="intro-text" transform="rotate(0)">Drag ball below to begin :)</text>
 
+    <!-- Fruit Counter, shows how many fruit you have collected-->
     <div id="score-container">
-        <!-- Fruit Counter -->
         <text id="fruit-counter" class="no-drag" transform="rotate(0)">0</text>
 
-        <!-- High Score -->
+        <!-- End game text, high score and how to play again.-->
         <div id="end-game-text">
             <div id="high-score">High Score: 0</div>
             <div id="play-again">To play again, drag the ball</div>
@@ -40,14 +40,14 @@
 
     <!-- Super Fruit Time! Progress Bar -->
     <div class="progress-bar-container game-start-dependant">
-        <svg viewBox="0 0 300 300">
-            <g transform="translate(150,150)">
+        <svg id="progress-bar-container-inner" viewBox="0 0 0 0">
+            <g>
                 <circle cx="0" cy="0" r="125" class="progress-bar" id="background-bar"></circle>
             </g>
-            <g transform="translate(150,150)">
+            <g>
                 <circle cx="0" cy="0" r="125" class="progress-bar" id="collected-fruit-progress"></circle>
             </g>
-            <g transform="translate(150,150)">
+            <g>
                 <circle cx="0" cy="0" r="125" class="progress-bar" id="super-fruit-timer"></circle>
             </g>
         </svg>
@@ -65,11 +65,11 @@
     body {
         margin: 0;
         overflow: hidden;
-        /* Adjust background color */
+        /* Page Background Color */
         background-color: #1a1a1a;
-        /* Adjust Font Color */
+        /* Page Font Color  */
         color: #ffffff;
-        /* Adjust Font */
+        /* Page Font */
         font-family: Arial, sans-serif;
     }
 
@@ -79,36 +79,40 @@
         user-select: none;
     }
 
+    /* Is invisible if game has not started */
     .game-start-dependant {
         opacity: 0;
         transition: opacity .25s ease-in-out;
     }
 
+    /* Displays game time left. Stretches across the top */
     #timer-bar {
         position: absolute;
+        /* Control its position on page */
         top: 0;
         left: 0;
+        /* Stretch across page */
         width: 100%;
-        /* Make it stretch all the way across the top */
+        /* Height */
         height: 12px;
-        /* Adjust the height as needed */
+        /* Color */
         background-color: white;
-        /* Choose a background color */
         transition: width 1s linear;
-        /* Add animation for width changes */
     }
 
+    /* Instructional text at the start of the game */
     #intro-text {
         position: absolute;
+        opacity: 1;
+        /* Centered in the middle of the screen for resizing purposes */
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
+        text-align: center;
+        /* Big Bold Text */
         font-weight: bold;
         font-size: 48px;
-        color: white;
         z-index: 2;
-        text-align: center;
-        opacity: 1;
         transition: opacity .25s ease-in-out;
     }
 
@@ -116,9 +120,10 @@
     #throw-area {
         border-radius: 50%;
         position: absolute;
-        display: none;
         user-drag: none;
-        /* Color of throw area */
+        /* Not available until game start */
+        display: none;
+        /* Initial color of the throw area, will be rainbow based on script*/
         background: rgba(255, 0, 0, 0.2);
         /* Fade in and out*/
         transition: width 0.2s, height 0.2s;
@@ -137,7 +142,7 @@
     #ball {
         border-radius: 50%;
         position: absolute;
-        opacity: 100%;
+        opacity: 1;
         user-drag: none;
         cursor: grab;
         /* Initial Color */
@@ -181,13 +186,16 @@
 
     /* Score Container */
     #score-container {
+        /* Center in the view */
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
         text-align: center;
+        /* Text stylingf */
         font-weight: bold;
         color: white;
+        /* Ensure the score counter is rendered below most elements */
         z-index: 2;
     }
 
@@ -197,6 +205,7 @@
         transition: font-size 2s ease-in-out, opacity 0.25s ease-in-out;
     }
 
+    /* Enlarge the fruit count fro game end */
     #fruit-counter.enlarged {
         font-size: 120px;
         transition: font-size 2s ease-in-out, opacity 0.25s ease-in-out;
@@ -215,6 +224,7 @@
         opacity: .5;
     }
 
+    /* Text which appears at the end of the game, specifically the score and how to replay */
     #end-game-text {
         opacity: 0;
         transition: opacity .25s ease-in-out;
@@ -225,6 +235,7 @@
         position: absolute;
         opacity: 0;
         transition: opacity .25s ease-in-out;
+        /* Fruit appears below ball but above throw area and timers */
         z-index: 4;
         /* Prevent highlighting */
         -webkit-user-select: none;
@@ -233,22 +244,17 @@
         user-select: none;
     }
 
-    /* Specifically the counted fruit */
-    #collected-fruits {
-        font-weight: bold;
-        margin-left: 5px;
-    }
-
     /* Wow text which appears when fruit is collected */
     #wow-text {
         position: absolute;
         font-size: 16px;
-        color: white;
         opacity: 0;
         transition: opacity .25s ease-in-out;
+        /* Ensure wow text is below most things  */
         z-index: 6;
     }
 
+    /* Holds all of the progress bars */
     .progress-bar-container {
         position: absolute;
         transform: translate(-50%, -50%) rotate(-90deg);
@@ -269,8 +275,10 @@
         position: absolute;
     }
 
+    /* Super Fruit Timer is the timer for super fruit mode */
     #super-fruit-timer {
         display: block;
+        /* Syling */
         opacity: 0;
         fill-opacity: 0;
         stroke: white;
@@ -279,8 +287,10 @@
         transition: opacity .25s ease-in-out;
     }
 
+    /* Progress bar for collected fruit */
     #collected-fruit-progress {
         display: block;
+        /* Styling */
         opacity: 1;
         fill-opacity: 0;
         stroke: white;
@@ -289,27 +299,34 @@
         transition: opacity .25s ease-in-out, stroke-dashoffset .25s ease-in-out;
     }
 
+    /* Display for the fruit count */
     #fruit-counter {
+        /* Center on page */
         position: absolute;
         opacity: 0;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
+        /* Styling */
         font-weight: bold;
         font-size: 48px;
-        color: white;
+        /* Display fruit counter below most elements */
         z-index: 2;
         transition: font-size 2s ease-in-out, opacity 0.25s ease-in-out;
     }
 
+    /* Display fruit counter enlarge at end game */
     #fruit-counter.enlarged {
         font-size: 120px;
         transition: font-size 2s ease-in-out, opacity 0.25s ease-in-out;
     }
 
+    /* Background of the fill bar behind the progress bar  */
     #background-bar {
+        /* Placement */
         width: 100%;
         height: 100%;
+        /* Styling  */
         stroke-width: var(--stroke);
         fill-opacity: 0;
         stroke: #333;
@@ -318,26 +335,26 @@
 
 <script>
     // Size Variables (initialize first)
-    let ballSize = 50;
-    let fruitSize = ballSize * 1.5;
-    let throwAreaSize = ballSize * 10;
-
-    let fruits = document.querySelectorAll('.fruit');
-
+    let screenSize = window.innerHeight + window.innerWidth; /* Get the screen size to help determine size of everything */
+    let ballSize = Math.min(60, Math.max(24, Math.floor((screenSize / 2) / 20))) /* Determine ball size based on screen size */
+    let fruitSize = ballSize * 1.42; /* Determine fruit size based on ball size */
+    let throwAreaSize = ballSize * 10; /* Throw area size based on ball */
+    let fruitAmount = Math.round(screenSize / 900) /* Amount of fruit based on screen size */
+    let fruits = document.querySelectorAll('.fruit');  /* All fruits on screen */
     // Game-start Constants
-    const gameElements = document.getElementsByClassName('game-start-dependant');
-    const introText = document.getElementById('intro-text');
-    const endGameText = document.getElementById('end-game-text');
-
+    const gameElements = document.getElementsByClassName('game-start-dependant'); /* All fruits on screen */
+    const introText = document.getElementById('intro-text'); /* Introduction text */
+    const endGameText = document.getElementById('end-game-text'); /* End game text */
+    const gameTime = 1800; /* How long the game is in milliseconds */
     // Ball-adjacent Constants
-    const throwArea = document.getElementById('throw-area');
-    const ball = document.getElementById('ball');
-    const trailCircles = [];
-    const trailLength = 20;
+    const throwArea = document.getElementById('throw-area'); /* Throw area on document */
+    const ball = document.getElementById('ball'); /* Ball player controls */
+    const trailCircles = []; /* Trail attached to the ball */
+    const trailLength = 20; /* Max trail length */
     // Fruit-adjacent Constants
-    const fruitContainer = document.getElementById('fruit-container');
-    const fruitCounter = document.getElementById('fruit-counter');
-    const wowText = document.getElementById('wow-text');
+    const fruitContainer = document.getElementById('fruit-container'); /* Where all the fruit should be placed */
+    const fruitCounter = document.getElementById('fruit-counter'); /* Where the counted fruit/score goes */
+    const wowText = document.getElementById('wow-text'); /* Text that shows wow when a fruit collision happens */
     const fruitPaths = [ // Fruit Image paths
         'Orange.png',
         'Watermelon.png',
@@ -356,64 +373,72 @@
         'Pineapple.png',
         'Mango.png',
     ];
-    const fruitOpacities = Array.from(fruits).map(() => 1);
+    const fruitOpacities = Array.from(fruits).map(() => 1); /* Fruit opacities, helps with transition */
     // Time Constants
-    const superFruitTime = 10000;
-    const fadeTime = .25;
+    const superFruitTime = 7500;  /* Amount of time in superfruit mode in milliseconds */
+    const fadeTime = .25; /* Time it takes for elements to fade out/in */
     // Progress Bar Constants
-    const collectedFruitProgressBar = document.getElementById('collected-fruit-progress');
-    const superFruitTimer = document.getElementById('super-fruit-timer');
-    const radius = collectedFruitProgressBar.r.baseVal.value; // Radius
-    const circleLength = (radius * Math.PI * 2);
-    let currentLength = 0;
+    const collectedFruitProgressBar = document.getElementById('collected-fruit-progress'); /* Collected fruit progress bar displays how many fruit til super fruit mode */
+    const superFruitTimer = document.getElementById('super-fruit-timer'); /* Timer for super fruit mode */
+    const backgroundBar = document.getElementById('background-bar'); /* Background bar to visually organize the progress bar */
+    const radius = collectedFruitProgressBar.r.baseVal.value; /* Radius of the progress bars */
+    const circleLength = (radius * Math.PI * 2); /* Circle length is the length of the circle so that super fruit mode can count down */
+    const svgElement = document.getElementById('progress-bar-container-inner'); // Get the view box for the progress bar container. Displays progress bars
+    const viewBoxConstant = 300;  /* How big is the view box for the progress bars? */
+    const newViewBox = `0 0 ${viewBoxConstant} ${viewBoxConstant}`; // View box to display the progress bar
+    const halfViewBoxSize = viewBoxConstant / 2; // Calculate half of the viewBox size
+    const progressBarElements = svgElement.querySelectorAll('.progress-bar'); // Get references to all elements with class 'progress-bar'
     // Physics Constants
-    const gravity = 0.5;
-    const friction = 0.98;
+    const gravity = 0.5; /* How fast ball should fall naturally */
+    const friction = 0.98; /* Slow down based on bumping into walls */
     const mouseLeftThreshold = 100000000; // Define a time threshold (in milliseconds)
 
 
 
     // Variables
     // Game-level variables
-    let gameStart = false;
-    const gameTime = 1800;
-    let gameTimeCounter = gameTime;
+    let gameStart = false; /* Has the game started? */
+    let gameTimeCounter = gameTime; /* Time counter that counts down game time on game start */
     // Ball-adjacent Variables
-    let isDragging = false;
-    let isReleased = false;
-    let velocity = { x: 0, y: 0 };
-    let initialDragPosition = { x: 0, y: 0 };
-    let insideThrowArea = false;
+    let isDragging = false; /* Is the user dragging? */
+    let isReleased = false; /* Has the user released the ball after dragging */
+    let velocity = { x: 0, y: 0 }; /* The speed the ball is moving at */
+    let initialDragPosition = { x: 0, y: 0 }; /* Where did the user initially start dragging from? Determines ball speed. Distance away is faster and farther */
+    let insideThrowArea = false; /* Is the ball inside the throw area? Tells checkCollision() where to restrict the ball */
     let mouseLeftTime = 0; // Track how long the mouse has been outside the throw area
     // Fruit Adjacent Variables
-    let superFruitMode = false;
-    let position = { x: (window.innerWidth - ballSize) / 2, y: (window.innerHeight - ballSize) / 2 };
+    let superFruitMode = false; /* Are you in super fruit mode? */
+    let position = { x: (window.innerWidth - ballSize) / 2, y: (window.innerHeight - ballSize) / 2 }; /* Determine the position the ball is in, x and y. Initially starts in middle of screen */
     let collectedFruits = 0; // Fruit collected counting up to Super Fruit Mode. Then set back to 0
-    let totalFruits = 0 // Total Fruit
+    let totalFruits = 0; // Total Fruit
     // Color Variables
-    let hue = 0;
-    let highScore = 0;
-
+    let hue = 0; /* The current hue (controls rainbow) */
+    let highScore = 0; /* What is the highest score the user has achieved? */
     // Progress Bar Variables
-    let percentage = 0;
-    let newOffset = 0;
-    let superFruitTimeTicks = (superFruitTime / 1000) * 60;
-    let step = circleLength / superFruitTimeTicks;
-
+    let percentage = 0; /* How full is the super fruit gauge? 0-100 */
+    let newOffset = 0; /* Helper variable to make it easier to move the collected fruit gauge */
+    let superFruitTimeTicks = (superFruitTime / 1000) * 60; /* How long is super fruit mode? This is used to help move the super fruit mode gauge */
+    let step = circleLength / superFruitTimeTicks; /* Step size to make sure super fruit mode gauge moves down enough */
+    let currentLength = 0; /* Current length of the progress bar so it can count down */
     // Intro sequence variables
-    let bounceTicks = 350;
-
-    // Root for CSS
-    root = document.documentElement;
-    root.style.setProperty('--stroke', (radius / 6.5));
-    root.style.setProperty('--timer', (`${superFruitTime / 1000}s`));
+    let bounceTicks = 350; /* Reminder to interact with the ball bounces, only when gameStart = false */
 
     // Set progress bars
-    collectedFruitProgressBar.style.strokeDasharray = `${circleLength}px`;
+    svgElement.setAttribute('viewBox', newViewBox); // Set viewbox
+    collectedFruitProgressBar.style.strokeDasharray = `${circleLength}px`; // I hate dash array and dash offset. do not ask me what these do. this is trial and error.
     collectedFruitProgressBar.style.strokeDashoffset = `${circleLength}px`;
     superFruitTimer.style.strokeDasharray = `${circleLength}px`;
     superFruitTimer.style.strokeDashoffset = 0;
+    // Loop through each progress bar and set the new transform value
+    progressBarElements.forEach((element) => {
+        const group = element.parentNode;
+        group.setAttribute('transform', `translate(${halfViewBoxSize}, ${halfViewBoxSize})`); // Puts it halfway through the container
+    });
 
+    // Root for CSS
+    root = document.documentElement;
+    root.style.setProperty('--stroke', (radius / 6.5)); // Stroke for the progress bars
+    root.style.setProperty('--timer', (`${superFruitTime / 1000}s`)); // How much time is in the timer for super fruit time
 
     // Set ball sizes
     ball.style.width = `${ballSize}px`;
@@ -421,17 +446,16 @@
 
     // Generate initial fruits
     function generateFruit() {
-        const newFruit = document.createElement('img');
-        document.body.appendChild(newFruit);
-        newFruit.classList.add('fruit', 'no-drag');
-        newFruit.src = getRandomFruitPath();
-        newFruit.style.width = `${fruitSize}px`;
-        newFruit.style.height = `${fruitSize}px`;
-        newFruit.style.opacity = 0;
-        setFruitPositions(newFruit);
-        newFruit.style.transition = 'opacity 0.25s';
+        const newFruit = document.createElement('img'); // Make new fruit
+        fruitContainer.appendChild(newFruit); // Append it
+        newFruit.classList.add('fruit', 'no-drag'); // Give it the proper classes
+        newFruit.src = getRandomFruitPath(); // Get the actual image for it
+        newFruit.style.width = `${fruitSize}px`; // Styling
+        newFruit.style.height = `${fruitSize}px`; // Styling
+        newFruit.style.opacity = 0; // Styling
+        setFruitPositions(newFruit); // Where should it be placed?
+        newFruit.style.transition = `opacity ${fadeTime}s`; // For fruit
         newFruit.style.opacity = 1; // Fade in the fruit
-
     }
 
     // Function to get a random fruit path
@@ -440,6 +464,7 @@
         return fruitPaths[randomIndex];
     }
 
+    // Figure out where the fruit should be placed on the document page
     function setFruitPositions(collectedFruit) {
         // Get the collected fruit's x and y boundary
         const collectedFruitRect = collectedFruit.getBoundingClientRect();
@@ -493,14 +518,14 @@
                     superFruitMode = true; // You are in super fruit mode
 
                     // Handle collected fruits
-                    percentage += 20;
+                    percentage += 20; // Add percentage to update the collected fruit gauge
                     newOffset = (100 - percentage) * (radius * 2 * Math.PI) / 100;
-                    collectedFruitProgressBar.style.strokeDashoffset = `${newOffset}px`;
+                    collectedFruitProgressBar.style.strokeDashoffset = `${newOffset}px`; // Update it
                     collectedFruits = 0; // Collected fruit to 0
 
                     // Summon super fruit timer
-                    superFruitTimer.style.opacity = 0;
-                    superFruitTimer.style.opacity = 1;
+                    superFruitTimer.style.opacity = 0; // Fade in fruit timer, double checck opacity is 0.
+                    superFruitTimer.style.opacity = 1; // Fade in fruit timer
 
                     // Handle super fruit impacts
                     ballSize *= 2; // Ball size amplify
@@ -508,7 +533,7 @@
                     ball.style.height = `${ballSize}px`; // Ball height change
 
                     // Generate fruit
-                    for (let i = 0; i < 4; i++) {
+                    for (let i = 0; i < fruitAmount; i++) {
                         generateSuperFruit();
                     }
 
@@ -525,7 +550,7 @@
 
                         superFruitMode = false; // No longer in super fruit mode
 
-                        superFruitTimer.style.opacity = 0;
+                        superFruitTimer.style.opacity = 0; // Fade it out.
 
                         const superFruits = document.querySelectorAll('.superfruit'); // Selects everything labeled superfruit
                         superFruits.forEach(superFruit => {
@@ -551,23 +576,23 @@
         });
     }
 
-    function handleTransitionEnd() {
-        percentage = 0;
-        collectedFruitProgressBar.style.strokeDashoffset = `${radius * 2 * Math.PI}px`;
+// Function to handle the end of a transition
+function handleTransitionEnd() {
+    percentage = 0;
+    collectedFruitProgressBar.style.strokeDashoffset = `${radius * 2 * Math.PI}px`;
+    // Remove the event listener when it's no longer needed
+    collectedFruitProgressBar.removeEventListener('transitionend', handleTransitionEnd);
+}
 
-        // Remove the event listener when no longer needed
-        collectedFruitProgressBar.removeEventListener('transitionend', handleTransitionEnd);
-    }
-
-    // Is the ball and the fruit colliding
-    function checkBallFruitBoundingClientRects(ballRect, fruitRect) {
-        return (
-            ballRect.left < fruitRect.right &&
-            ballRect.right > fruitRect.left &&
-            ballRect.top < fruitRect.bottom &&
-            ballRect.bottom > fruitRect.top
-        );
-    }
+// Function to check if the ball and the fruit are colliding
+function checkBallFruitBoundingClientRects(ballRect, fruitRect) {
+    return (
+        ballRect.left < fruitRect.right &&
+        ballRect.right > fruitRect.left &&
+        ballRect.top < fruitRect.bottom &&
+        ballRect.bottom > fruitRect.top
+    );
+}
 
     // Animation: Instantly makes item invisible without transition
     function instantOut(object) {
@@ -600,7 +625,7 @@
 
     // Function to start the timer
     function startTimer() {
-        if (superFruitMode) {
+        if (superFruitMode) { // Checks if in super fruit mode
             currentLength = currentLength + step;
             superFruitTimer.style.strokeDashoffset = currentLength;
         }
@@ -657,16 +682,16 @@
             introText.style.opacity = 0;
 
             // Generate initial fruits
-            for (let i = 0; i < 3; i++) {
+            for (let i = 0; i < fruitAmount; i++) {
                 generateFruit();
             }
 
+            // Reset gameTimeCounter with the game time 
             gameTimeCounter = gameTime;
 
+            // Size the text back down and set total fruit to 0
             fruitCounter.classList.remove('enlarged');
             totalFruits = 0;
-
-
 
             // Bring in the game elements: progress bars & wow
             for (let i = 0; i < gameElements.length; i++) {
@@ -677,11 +702,6 @@
             fruitCounter.style.opacity = 1;
             endGameText.style.opacity = 0;
 
-            trailCircles.forEach((circle) => {
-                circle.element.style.transition = 'opacity 0.25s';
-                circle.element.style.opacity = 1;
-            });
-
             // Set game start to true
             gameStart = true;
             isDragging = true;
@@ -690,9 +710,9 @@
             initialDragPosition = { x: e.clientX, y: e.clientY };
             throwArea.style.display = 'block';
 
+            // Place throw area
             const throwAreaX = position.x + ballSize / 2 - throwAreaSize / 2;
             const throwAreaY = position.y + ballSize / 2 - throwAreaSize / 2;
-
             throwArea.style.width = `${throwAreaSize}px`;
             throwArea.style.height = `${throwAreaSize}px`;
             throwArea.style.left = `${throwAreaX}px`;
@@ -700,6 +720,7 @@
             throwArea.style.backgroundColor = `hsla(${hue}, 100%, 50%, 0.2)`;
 
         } else if (gameStart) {
+            // Place throw area
             isDragging = true;
             isReleased = false;
             velocity = { x: 0, y: 0 };
@@ -800,7 +821,7 @@
             // Fade out and remove each element (including the ball)
             let fruits = document.querySelectorAll('.fruit');
             fruits.forEach((fruit) => {
-                fruit.style.transition = 'opacity 0.25s';
+                fruit.style.transition = `opacity ${fadeTime}s`;
                 fruit.style.opacity = 0;
                 setTimeout(() => {
                     fruit.remove();
@@ -809,12 +830,12 @@
 
             // Fade out and remove the trail circles
             trailCircles.forEach((circle) => {
-                circle.element.style.transition = 'opacity 0.25s';
+                circle.element.style.transition = `opacity ${fadeTime}s`;
                 circle.element.style.opacity = 0;
             });
 
             for (let i = 0; i < gameElements.length; i++) {
-                gameElements[i].style.transition = 'opacity 0.25s';
+                gameElements[i].style.transition = `opacity ${fadeTime}s`;
                 gameElements[i].style.opacity = 0;
                 setTimeout(() => {
                     gameElements[i].remove;
@@ -822,7 +843,7 @@
             }
 
             if (isDragging) {
-                throwArea.style.transition = 'opacity 0.25s';
+                throwArea.style.transition = `opacity ${fadeTime}s`;
                 throwArea.style.opacity = 0;
             }
         }
@@ -870,21 +891,21 @@
                     const minOpacity = 0.2;
                     const maxOpacity = 1;
 
-                    ball.style.transition = 'opacity 0.25s';
+                    ball.style.transition = `opacity ${fadeTime}s`;
                     ball.style.opacity = minOpacity;
                     // Use setTimeout to change the opacity back to maxOpacity after 0.25s
                     setTimeout(() => {
                         ball.style.opacity = maxOpacity;
-                    }, 250); // 0.25s in milliseconds
+                    }, fadeTime); // 0.25s in milliseconds
 
                     let fruits = document.querySelectorAll('.fruit');
                     fruits.forEach((fruit) => {
-                        fruit.style.transition = 'opacity 0.25s';
+                        fruit.style.transition = `opacity ${fadeTime}s`;
                         fruit.style.opacity = minOpacity;
                         // Use setTimeout to change the opacity back to maxOpacity after 0.25s
                         setTimeout(() => {
                             fruit.style.opacity = maxOpacity;
-                        }, 250); // 0.25s in milliseconds
+                        }, fadeTime); // 0.25s in milliseconds
                     });
                 }
             }
@@ -906,7 +927,7 @@
                         resetSuperFruitTimer(); // Reset the superFruitTimer
                     }
                     superFruitMode = false; // No longer in super fruit mode
-                }, 250);
+                }, fadeTime);
             }
         }
         if (!isDragging) { // Are we dragging? but make it the physics
