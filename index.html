@@ -18,7 +18,7 @@
     </a>
 
     <!-- All Fruit, holds both regular fruit and created super fruit. -->
-    <div id="fruit-container no-drag">
+    <div id="fruit-container">
     </div>
 
     <!-- Wow for fruit collection, gives feedback to player that they have collected a fruit -->
@@ -40,7 +40,7 @@
 
     <!-- Super Fruit Time! Progress Bar -->
     <div class="progress-bar-container game-start-dependant no-drag">
-        <svg id="progress-bar-container-inner no-drag" viewBox="0 0 0 0">
+        <svg id="progress-bar-container-inner" viewBox="0 0 0 0">
             <g>
                 <circle cx="0" cy="0" r="125" class="progress-bar no-drag" id="background-bar"></circle>
             </g>
@@ -73,11 +73,11 @@
         font-family: Arial, sans-serif;
     }
 
-    /* Prevents dragging so that game continues seamlessly*/
+    /* Prevents dragging */
     .no-drag {
-    -webkit-user-drag: none;
-    -webkit-user-select: none;
-    user-select: none;
+        -webkit-user-drag: none;
+        user-select: none;
+        user-select: none;
     }
 
     /* Is invisible if game has not started */
@@ -337,7 +337,7 @@
 <script>
     // Size Variables (initialize first)
     let screenSize = window.innerHeight + window.innerWidth; /* Get the screen size to help determine size of everything */
-    let ballSize = Math.min(72, Math.max(36, Math.floor((screenSize / 2) / 20))) /* Determine ball size based on screen size */
+    let ballSize = Math.min(72, Math.max(36, Math.floor((screenSize / 2) / 23))) /* Determine ball size based on screen size */
     let fruitSize = ballSize * 1.42; /* Determine fruit size based on ball size */
     let throwAreaSize = ballSize * 10; /* Throw area size based on ball */
     let fruitAmount = Math.round(screenSize / 900) /* Amount of fruit based on screen size */
